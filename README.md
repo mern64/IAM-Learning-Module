@@ -8,14 +8,6 @@ It's a single HTML file: 21 days of concepts across three weeks, plus a Day 0
 orientation and a 20-question final exam. Everything runs in the browser with no
 build step, no dependencies, and no internet connection required.
 
-## Live version
-
-If GitHub Pages is enabled for this repo (see below), the handbook is available at:
-
-```
-https://<your-username>.github.io/<repo-name>/IAM-Concepts-Handbook.html
-```
-
 ## What's inside
 
 - **Day 0 — Orientation:** the two questions IAM exists to answer, and a map of the whole field.
@@ -38,28 +30,6 @@ Progress is saved automatically in your browser (via `localStorage`):
 
 Because it uses browser storage, progress is per-browser and per-device — it
 won't sync across machines, and clearing your browser data will reset it.
-
-## Running it
-
-Just open `IAM-Concepts-Handbook.html` in any modern browser — double-click the
-file, or serve the folder with any static server. No installation needed.
-
-## Hosting it yourself on GitHub Pages
-
-1. Push this repo to GitHub (see `SETUP.md` for the exact commands).
-2. On GitHub: **Settings → Pages → Build and deployment → Source: Deploy from a branch**.
-3. Choose the `main` branch and the `/ (root)` folder, then **Save**.
-4. Wait a minute, then visit the URL shown at the top of the Pages settings.
-
-## Repository layout
-
-```
-.
-├── IAM-Concepts-Handbook.html   # the handbook (open this)
-├── README.md                    # this file
-├── SETUP.md                     # step-by-step git + Pages instructions
-└── LICENSE                      # license for your own write-ups
-```
 
 ## Credits & scope
 
