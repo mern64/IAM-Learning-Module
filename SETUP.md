@@ -9,12 +9,12 @@ From inside your already-cloned repo folder:
 
 ```bash
 # 1. Copy the handbook files into the repo folder first (drag them in, or use cp):
-#    IAM-Concepts-Handbook.html, README.md, SETUP.md, LICENSE
+#    index.html, README.md, SETUP.md, LICENSE
 #    (If you already have a README you want to keep, rename this one to
 #     HANDBOOK-README.md instead of overwriting yours.)
 
 # 2. Stage the new files
-git add IAM-Concepts-Handbook.html README.md SETUP.md LICENSE
+git add index.html README.md SETUP.md LICENSE
 
 # 3. Commit
 git commit -m "Add interactive IAM concepts handbook"
@@ -53,33 +53,18 @@ git push -u origin main
 3. Under **Build and deployment → Source**, choose **Deploy from a branch**.
 4. Branch: **main**, folder: **/ (root)**. Click **Save**.
 5. Wait ~1 minute, refresh, and copy the URL shown ("Your site is live at …").
-6. Your handbook is at that URL + `/IAM-Concepts-Handbook.html`, e.g.
-   `https://<your-username>.github.io/<repo-name>/IAM-Concepts-Handbook.html`
+6. Your handbook is at the site URL, e.g.
+  `https://<your-username>.github.io/<repo-name>/`
 
 Once it's on Pages and you open it there, your progress (ticked days, XP, exam
 score) will save automatically and persist between visits.
 
-## D. Making it the default page (optional, nicer URL)
-
-If you'd like the handbook to open at the bare repo URL (no filename needed),
-make a copy named `index.html`:
-
-```bash
-cp IAM-Concepts-Handbook.html index.html
-git add index.html
-git commit -m "Add index.html so the handbook is the site landing page"
-git push
-```
-
-Then the handbook opens directly at
-`https://<your-username>.github.io/<repo-name>/`.
-
-## E. Updating it later
+## D. Updating it later
 
 Whenever you get a new version of the file, just replace it and:
 
 ```bash
-git add IAM-Concepts-Handbook.html index.html
+git add index.html
 git commit -m "Update handbook"
 git push
 ```
@@ -97,5 +82,6 @@ your browser, not the file, so updating the handbook won't wipe it.
   sure the branch and `/root` folder are selected; confirm the filename in the
   URL matches exactly (it's case-sensitive).
 - **Progress didn't save:** make sure you're opening the file over the Pages
-  URL (https://…), not from a `file://` path or inside a private/incognito
-  window, both of which can restrict browser storage.
+  URL (https://...), not from a `file://` path or inside a private/incognito
+  window, both of which can restrict browser storage. Progress is local to
+  that browser and device; it will not follow you to another machine.

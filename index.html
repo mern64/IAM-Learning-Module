@@ -128,6 +128,15 @@
   .cp-a{display:none;margin-top:9px;padding:11px 14px;border-left:3px solid var(--cyan);background:var(--panel2);border-radius:0 8px 8px 0;font-family:var(--sans);font-size:14px;line-height:1.5;color:var(--ink-soft);}
   .cp-a.show{display:block;animation:rise .3s ease;}
   .cp-a strong{color:#fff;}
+  .day-outline{margin:0 0 30px;padding:14px 18px;border-left:3px solid var(--cyan);background:var(--cyan-wash);max-width:var(--maxread);font-family:var(--sans);}
+  .outline-title{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);margin-bottom:8px;}
+  .day-outline nav{display:flex;flex-wrap:wrap;gap:7px 16px;margin:0;}
+  .day-outline a{font-size:13px;color:var(--ink-soft);text-decoration:none;line-height:1.4;}
+  .day-outline a:hover,.day-outline a:focus{color:var(--ink);text-decoration:underline;text-underline-offset:3px;}
+  .lesson-lens{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0 30px;max-width:var(--maxread);font-family:var(--sans);}
+  .lesson-lens div{padding:12px 14px;background:var(--panel);border:1px solid var(--edge);border-radius:9px;}
+  .lesson-lens b{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--cyan);margin-bottom:5px;}
+  .lesson-lens span{display:block;color:var(--ink-soft);font-size:13px;line-height:1.45;}
 
   /* exam */
   .exam-q{border:1px solid var(--edge);border-radius:12px;background:var(--panel);padding:18px 20px;margin:16px 0;max-width:var(--maxread);}
@@ -172,6 +181,7 @@
     .rail{position:fixed;z-index:40;transform:translateX(-100%);transition:transform .28s;box-shadow:0 0 50px rgba(0,0,0,.5);}
     .rail.open{transform:none;}
     .menutoggle{display:flex;align-items:center;gap:8px;position:fixed;z-index:30;top:14px;left:14px;background:var(--panel2);border:1px solid var(--edge);border-radius:10px;padding:10px 15px;font-family:var(--sans);font-size:14px;font-weight:700;color:var(--ink);cursor:pointer;}
+    .menutoggle:focus-visible,.tab:focus-visible,.btn:focus-visible,.mark-done:focus-visible,.day-outline a:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;}
     main{padding:0 20px;}
     .hero{margin:0 -20px 32px;padding:64px 20px 32px;}
     .page{padding-top:8px;}
@@ -182,9 +192,9 @@
 </style>
 </head>
 <body>
-<button class="menutoggle" onclick="document.querySelector('.rail').classList.toggle('open')">☰ Days</button>
+<button class="menutoggle" aria-controls="dayRail" aria-expanded="false" onclick="toggleRail()">☰ Days</button>
 <div class="wrap">
-  <aside class="rail">
+  <aside class="rail" id="dayRail">
     <div class="brand">
       <div class="crest">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 2l8 3v6c0 5-3.5 8.5-8 11-4.5-2.5-8-6-8-11V5l8-3z" fill="#0e1420" fill-opacity=".25" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 12l2.4 2.4L16 9.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -456,13 +466,37 @@ const DAYS=[
  {n:22,short:"Final Exam",group:"Assessment"},
 ];
 const LEVELS=["Novice","Apprentice","Practitioner","Specialist","Architect","Guardian"];
+const DAY_LENS={
+  0:["Build the map","Separate identity from permission","Confusing login with access"],
+  1:["Understand the boundary","Read users, groups, OUs, and forests","Treating an OU as a security boundary"],
+  2:["Trace the dependencies","Diagnose DNS, ports, and clock failures","Blaming the password for a network problem"],
+  3:["Trust the proof","Read certificates as identity and trust material","An expired or mismatched certificate"],
+  4:["Follow the ticket","Explain how Kerberos avoids sending passwords to apps","Clock skew and ticket assumptions"],
+  5:["Follow the assertion","Separate the IdP, SP, browser, and signature","A shared signing certificate expires"],
+  6:["Follow the grant","Distinguish delegated access from login","A broad or missing redirect boundary"],
+  8:["Read the token","Use claims, audience, issuer, and expiry correctly","Trusting an unvalidated JWT claim"],
+  9:["Close the lifecycle","Connect account creation, updates, and removal","SSO works but the account never exists"],
+  10:["Test the factor","Compare phishing resistance and recovery paths","A strong factor with a weak fallback"],
+  11:["Evaluate continuously","Turn identity and context into a live decision","Treating the network location as trust"],
+  12:["Track the joiner-mover-leaver","Find where access should change","Privilege creep after a role change"],
+  13:["Challenge access","Read certification evidence and SoD conflicts","Rubber-stamping every approval"],
+  15:["Shrink privilege","Replace standing power with controlled elevation","Shared admin accounts"],
+  16:["Protect the secret","Reduce exposure, lifetime, and blast radius","A credential remains in Git history"],
+  17:["Model cloud trust","Separate who may assume a role from what it can do","A permissive trust policy"],
+  18:["Measure machine access","Find unused permissions and identity sprawl","Treating service accounts as invisible"],
+  19:["Turn findings into action","Prioritise identity-related application risk","A scanner result without ownership"],
+  20:["Use evidence","Turn identity data into a defensible decision","Alert fatigue hiding real anomalies"],
+  21:["Practice judgment","Make safe changes with a clear rollback","Acting in production without checking"],
+  22:["Retrieve the map","Explain the decisions across all three weeks","Memorising labels without tracing flows"]
+};
 
 const nav=document.getElementById('nav');let lg=null;
 DAYS.forEach(d=>{
   if(d.group!==lg){const g=document.createElement('div');g.className='navgroup';g.textContent=d.group;nav.appendChild(g);lg=d.group;}
   const b=document.createElement('button');
-  b.className='tab'+(d.n===0?' active':'')+(d.n>1?' locked':'');
+  b.className='tab'+(d.n===0?' active':'');
   b.dataset.tab=d.n;
+  b.setAttribute('aria-label','Open Day '+d.n+': '+d.short);
   b.innerHTML='<span class="num">'+String(d.n).padStart(2,'0')+'</span><span>'+d.short+'</span><span class="tick"></span>';
   b.onclick=()=>go(d.n);
   nav.appendChild(b);
@@ -1995,13 +2029,15 @@ ${hero(22,"Final Exam","20 questions spanning all 21 days. Answer them all, then
 // ---- template helpers ----
 function hero(n,title,lede){
   const d=DAYS[n];
+  const lens=DAY_LENS[n]||["Build the model","Connect the idea to a real access decision","Skipping the assumptions"];
   return '<div class="hero"><svg class="hero-svg" viewBox="0 0 900 320" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'+
     '<defs><radialGradient id="hg'+n+'" cx="78%" cy="10%" r="90%"><stop offset="0%" stop-color="#1c2a44"/><stop offset="100%" stop-color="#0e1420"/></radialGradient></defs>'+
     '<rect width="900" height="320" fill="url(#hg'+n+')"/>'+
     '<g stroke="#33507a" stroke-width="1" opacity=".5"><line x1="690" y1="70" x2="770" y2="150"/><line x1="770" y1="150" x2="680" y2="220"/><line x1="690" y1="70" x2="600" y2="140"/><line x1="600" y1="140" x2="680" y2="220"/><line x1="600" y1="140" x2="520" y2="90"/><line x1="770" y1="150" x2="850" y2="100"/></g>'+
     '<g><circle cx="690" cy="70" r="6" fill="#35d0c4"/><circle cx="770" cy="150" r="8" fill="#a184ff"/><circle cx="680" cy="220" r="6" fill="#35d0c4"/><circle cx="600" cy="140" r="9" fill="#fff"/><circle cx="520" cy="90" r="5" fill="#a184ff"/><circle cx="850" cy="100" r="5" fill="#35d0c4"/></g></svg>'+
-    '<div class="hero-inner reveal"><span class="chip"><span class="dot"></span>Day '+n+' · '+d.group+'</span>'+
-    '<h2 class="title">'+title+'</h2><p class="lede">'+lede+'</p></div></div>';
+    '<div class="hero-inner reveal"><span class="chip"><span class="dot"></span>Day '+n+' · '+d.group+'</span>'+ 
+    '<h2 class="title">'+title+'</h2><p class="lede">'+lede+'</p></div></div>'+ 
+    '<div class="lesson-lens" aria-label="Learning lens"><div><b>Focus</b><span>'+lens[0]+'</span></div><div><b>Apply</b><span>'+lens[1]+'</span></div><div><b>Watch for</b><span>'+lens[2]+'</span></div></div>';
 }
 function h3(icon,txt){return '<h3>'+ic(icon)+txt+'</h3>';}
 function quiz(n,items){
@@ -2045,25 +2081,57 @@ DAYS.filter(d=>d.n>=1).forEach(d=>{
      '<div class="reveal"><div class="soon-body"><div class="big">🔒</div><h4>Coming soon</h4></div>'+
      '<div class="footer-nav"><button class="btn ghost" onclick="go('+(d.n-1)+')">← Back</button><span></span></div></div>';
   }
+  addOutline(s);
   host.appendChild(s);
 });
 
-function go(n){
+function toggleRail(force){
+  const rail=document.querySelector('.rail');
+  const button=document.querySelector('.menutoggle');
+  const open=typeof force==='boolean'?force:!rail.classList.contains('open');
+  rail.classList.toggle('open',open);
+  button.setAttribute('aria-expanded',String(open));
+}
+function addOutline(day){
+  const headings=[...day.querySelectorAll('h3')];
+  if(!headings.length)return;
+  const outline=document.createElement('aside');
+  outline.className='day-outline';
+  outline.innerHTML='<div class="outline-title">In this day</div><nav aria-label="Sections in this day"></nav>';
+  const list=outline.querySelector('nav');
+  headings.forEach((heading,i)=>{
+    const id='day-'+day.dataset.day+'-section-'+(i+1);
+    heading.id=id;
+    const link=document.createElement('a');
+    link.href='#'+id;
+    link.textContent=heading.textContent.trim();
+    link.onclick=()=>{history.replaceState(null,'','#'+id);heading.scrollIntoView({behavior:'smooth',block:'start'});};
+    list.appendChild(link);
+  });
+  const firstContent=[...day.children].find(child=>child.classList.contains('reveal'))||day.firstElementChild;
+  day.insertBefore(outline,firstContent);
+}
+function go(n,writeHistory=true){
+  n=Number(n);
+  if(!DAYS.some(d=>d.n===n))n=0;
+  window.__currentDay=n;
   document.querySelectorAll('.day').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
   const day=document.querySelector('.day[data-day="'+n+'"]');
   const tab=document.querySelector('.tab[data-tab="'+n+'"]');
   if(day)day.classList.add('active');
   if(tab)tab.classList.add('active');
-  document.querySelector('.rail').classList.remove('open');
+  toggleRail(false);
   if(day)day.querySelectorAll('.reveal').forEach(r=>{r.style.animation='none';r.offsetHeight;r.style.animation='';});
   window.scrollTo({top:0});
+  if(writeHistory)history.pushState({day:n},'',n===0?'#start':'#day-'+n);
+  saveProgress();
 }
 
 const doneSet=new Set();
 const LS_KEY='iamquest.progress.v1';
 function saveProgress(){
-  try{localStorage.setItem(LS_KEY,JSON.stringify({done:[...doneSet],exam:window.__examScore||null}));}catch(e){}
+  try{localStorage.setItem(LS_KEY,JSON.stringify({done:[...doneSet],exam:window.__examScore||null,currentDay:window.__currentDay||0}));}catch(e){}
 }
 function refreshXP(){
   const xp=doneSet.size,total=DAYS.length,pct=Math.round(xp/total*100);
@@ -2088,8 +2156,35 @@ function restoreProgress(){
     if(day){const btn=day.querySelector('.mark-done');if(btn){btn.classList.add('is-done');const sp=btn.querySelector('span');if(sp)sp.textContent=(n===22?'✓ Exam complete':'✓ Day '+n+' complete');}}
   });
   refreshXP();
-  if(data.exam){window.__examScore=data.exam;}
+  if(data.exam){window.__examScore=data.exam;restoreExamScore(data.exam);}
+  const hash=location.hash.match(/^#day-(\d+)$/);
+  const current=hash?Number(hash[1]):Number(data.currentDay||0);
+  go(current,false);
 }
+function restoreExamScore(score){
+  const res=document.getElementById('examResult');
+  if(!res||!score)return;
+  const pct=Number(score.pct)||0;
+  const grade=pct>=90?'Distinction':pct>=75?'Strong pass':pct>=60?'Pass':'Keep going';
+  res.dataset.done='1';
+  res.innerHTML='<div class="exam-scorecard show"><div class="big-score">'+score.correct+' / '+score.total+'</div>'+ 
+    '<div class="grade" style="color:'+(pct>=75?'#5fe08a':pct>=60?'#ffb347':'#ff6b8a')+'">'+pct+'% · '+grade+'</div>'+ 
+    '<div class="verdict">Saved result restored. Reset the exam to take it again.</div></div>';
+  document.getElementById('examSubmit').disabled=true;
+}
+
+window.addEventListener('popstate',()=>{
+  const match=location.hash.match(/^#day-(\d+)$/);
+  go(match?Number(match[1]):0,false);
+});
+window.addEventListener('hashchange',()=>{
+  const match=location.hash.match(/^#day-(\d+)$/);
+  if(match)go(Number(match[1]),false);
+});
+document.addEventListener('keydown',event=>{
+  if(event.key==='Escape')toggleRail(false);
+});
+addOutline(document.querySelector('.day[data-day="0"]'));
 
 // ============ FINAL EXAM ENGINE ============
 const EXAM=[
@@ -2186,6 +2281,8 @@ function resetExam(){
   const res=document.getElementById('examResult');
   res.innerHTML='';delete res.dataset.done;
   for(const k in examState)delete examState[k];
+  delete window.__examScore;
+  saveProgress();
   document.getElementById('examSubmit').disabled=false;
   const host=document.getElementById('exam');if(host){host.innerHTML='';delete host.dataset.built;buildExam();}
 }

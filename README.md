@@ -4,7 +4,7 @@ An interactive, self-contained study handbook that teaches Identity and Access
 Management (IAM) from zero — built to prepare for an IT Enterprise Security
 internship in Identity & Access Management.
 
-It's a single HTML file: 21 days of concepts across three weeks, plus a Day 0
+It's a single HTML file (`index.html`): 21 days of concepts across three weeks, plus a Day 0
 orientation and a 20-question final exam. Everything runs in the browser with no
 build step, no dependencies, and no internet connection required.
 
@@ -26,10 +26,14 @@ Progress is saved automatically in your browser (via `localStorage`):
 
 - Days you mark complete stay ticked between visits.
 - The XP bar and level in the sidebar reflect how far you've got.
-- Your final-exam score is remembered.
+- Your final-exam score is remembered and restored visibly.
+- The last day you opened is restored, and each day has a small in-page outline.
+- Days can be bookmarked with URLs such as `index.html#day-9`.
 
 Because it uses browser storage, progress is per-browser and per-device — it
-won't sync across machines, and clearing your browser data will reset it.
+won't sync across machines, and clearing your browser data will reset it. The
+module is intentionally hosted as a static GitHub Pages site; cross-device sync
+would require a separate authenticated backend.
 
 ## Credits & scope
 
