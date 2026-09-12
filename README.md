@@ -14,6 +14,7 @@ build step, no dependencies, and no internet connection required.
 - **Week 1 — Foundations (Days 1–7):** Active Directory; DNS/ports/time; certificates; Kerberos; SAML; OAuth; a consolidation day.
 - **Week 2 — Modern & Governance (Days 8–14):** OIDC & JWTs; provisioning & SCIM; MFA & passkeys; Zero Trust; IGA lifecycle; IGA certification & SoD; a consolidation day.
 - **Week 3 — Privileged & Cloud (Days 15–21):** PAM; secrets management; cloud identity (AWS/Entra); non-human identities & CIEM; AppSec scanning; identity as a data problem; a capstone.
+- **Reference — List of Abbreviations:** IAM, Active Directory, protocol, governance, and security terms used throughout the module.
 - **Final Exam:** 20 questions across all three weeks, auto-graded, with a per-week breakdown and a full answer scheme.
 
 Each day has plain-language explanations, custom diagrams, "mental model" and

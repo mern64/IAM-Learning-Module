@@ -463,7 +463,8 @@ const DAYS=[
  {n:19,short:"AppSec scanning",group:"Week 3 · Privileged & Cloud"},
  {n:20,short:"Your edge",group:"Week 3 · Privileged & Cloud"},
  {n:21,short:"Capstone",group:"Week 3 · Privileged & Cloud"},
- {n:22,short:"Final Exam",group:"Assessment"},
+ {n:22,short:"Abbreviations",group:"Reference"},
+ {n:23,short:"Final Exam",group:"Assessment"},
 ];
 const LEVELS=["Novice","Apprentice","Practitioner","Specialist","Architect","Guardian"];
 const DAY_LENS={
@@ -487,7 +488,8 @@ const DAY_LENS={
   19:["Turn findings into action","Prioritise identity-related application risk","A scanner result without ownership"],
   20:["Use evidence","Turn identity data into a defensible decision","Alert fatigue hiding real anomalies"],
   21:["Practice judgment","Make safe changes with a clear rollback","Acting in production without checking"],
-  22:["Retrieve the map","Explain the decisions across all three weeks","Memorising labels without tracing flows"]
+   22:["Build your vocabulary","Translate acronyms into access decisions","Using a term without knowing its boundary"],
+   23:["Retrieve the map","Explain the decisions across all three weeks","Memorising labels without tracing flows"]
 };
 
 const nav=document.getElementById('nav');let lg=null;
@@ -2007,13 +2009,82 @@ ${checkpoint([
 ["Summarise the entire field in one sentence.","IAM answers \'who are you?\' and \'are you allowed?\' for every person and machine — at a scale, and with a rigour of proof, that turns two simple questions into a whole profession."],
 ["Which two intern questions come straight from your own edges?","\'How are non-human identities governed today?\' (Day 18) and \'Where does the certification cycle hurt most / has anyone scored entitlements by rarity?\' (Day 20). Both hit real gaps and show operational awareness."]
 ])}
-<div class="footer-nav reveal"><button class="btn ghost" onclick="go(20)">← Day 20</button><button class="btn primary" onclick="go(22)">Final Exam →</button></div>
+<div class="footer-nav reveal"><button class="btn ghost" onclick="go(20)">← Day 20</button><button class="btn primary" onclick="go(22)">Abbreviations →</button></div>
 <button class="mark-done" onclick="toggleDone(21,this)"><span>Mark Day 21 complete</span></button>
 </div>`;
 
-// ============ FINAL EXAM (day 22) ============
+// ============ ABBREVIATIONS (day 22) ============
 CONTENT[22]=`
-${hero(22,"Final Exam","20 questions spanning all 21 days. Answer them all, then submit to see your score, a per-section breakdown, and the full answer scheme with explanations.")}
+${hero(22,"List of Abbreviations","A quick reference for the specialized acronyms and terms used throughout the module, with extra focus on Active Directory and enterprise identity.")}
+<div class="reveal">
+<p>Use this page as a companion while studying. The expansion tells you what a term means; the note tells you why it matters in an IAM conversation. When two terms are commonly confused, the distinction is included.</p>
+
+${h3(IC.map,"IAM foundations and identity protocols")}
+<dl class="vocab">
+<dt>IAM</dt><dd><strong>Identity and Access Management.</strong> The discipline of answering who an identity is and what that identity may access.</dd>
+<dt>IdP</dt><dd><strong>Identity Provider.</strong> The system that authenticates a person and vouches for their identity to another service.</dd>
+<dt>SP</dt><dd><strong>Service Provider.</strong> The application or service that relies on an IdP's assertion or token. In SAML, the SP is usually the app the user is trying to open.</dd>
+<dt>SSO</dt><dd><strong>Single Sign-On.</strong> A user authenticates once and then accesses multiple trusted applications without entering a separate password for each one.</dd>
+<dt>MFA</dt><dd><strong>Multi-Factor Authentication.</strong> Authentication using two or more different factor types: something you know, have, or are.</dd>
+<dt>AD</dt><dd><strong>Active Directory.</strong> Microsoft's directory and identity platform commonly used to manage users, computers, groups, policies, and authentication in an enterprise.</dd>
+<dt>LDAP</dt><dd><strong>Lightweight Directory Access Protocol.</strong> A protocol for querying and changing directory data. LDAP is a way to talk to a directory; it is not the same thing as Active Directory.</dd>
+<dt>Kerberos</dt><dd><strong>Ticket-based network authentication protocol.</strong> It lets a user prove identity to services without sending the user's password to every service.</dd>
+<dt>NTLM</dt><dd><strong>NT LAN Manager.</strong> A legacy Microsoft authentication protocol. It remains important to recognise because fallback to NTLM can weaken modern authentication designs.</dd>
+<dt>SAML</dt><dd><strong>Security Assertion Markup Language.</strong> An XML-based federation standard in which an IdP sends a signed authentication assertion to an SP.</dd>
+<dt>OAuth</dt><dd><strong>Open Authorization.</strong> A delegated authorization framework. It lets an application receive limited access to a resource without receiving the user's password.</dd>
+<dt>OIDC</dt><dd><strong>OpenID Connect.</strong> An identity layer built on OAuth 2.0. OAuth answers “what may this client access?”; OIDC adds “who signed in?”</dd>
+<dt>JWT</dt><dd><strong>JSON Web Token.</strong> A compact, signed token that carries claims such as subject, issuer, audience, and expiry. A JWT is a token format, not automatically proof that every claim should be trusted.</dd>
+<dt>SCIM</dt><dd><strong>System for Cross-domain Identity Management.</strong> A standard API for provisioning, updating, and deprovisioning identities between systems.</dd>
+</dl>
+
+${h3(IC.tree,"Active Directory and Windows terms")}
+<dl class="vocab">
+<dt>DC</dt><dd><strong>Domain Controller.</strong> An Active Directory server that authenticates accounts and provides directory services for a domain.</dd>
+<dt>AD DS</dt><dd><strong>Active Directory Domain Services.</strong> The directory service role that stores and manages objects such as users, groups, computers, and domains.</dd>
+<dt>OU</dt><dd><strong>Organizational Unit.</strong> A container used to organize objects and apply administration or Group Policy. An OU is not a security boundary.</dd>
+<dt>GPO</dt><dd><strong>Group Policy Object.</strong> A collection of settings applied to users or computers, often through sites, domains, or OUs.</dd>
+<dt>ACL</dt><dd><strong>Access Control List.</strong> A set of permissions attached to a resource. An ACL describes who may perform which actions.</dd>
+<dt>ACE</dt><dd><strong>Access Control Entry.</strong> One rule inside an ACL, such as allowing a group to read a folder or denying a user access.</dd>
+<dt>SID</dt><dd><strong>Security Identifier.</strong> A unique identifier Windows uses for security principals. A username can change; the SID is the identity reference used in access checks.</dd>
+<dt>RID</dt><dd><strong>Relative Identifier.</strong> The portion of a Windows SID that identifies an object within a domain.</dd>
+<dt>SPN</dt><dd><strong>Service Principal Name.</strong> The name that maps a service instance to an account for Kerberos authentication. Duplicate or incorrect SPNs can cause Kerberos failures.</dd>
+<dt>GC</dt><dd><strong>Global Catalog.</strong> A distributed, searchable index of selected attributes for objects across an Active Directory forest.</dd>
+<dt>FQDN</dt><dd><strong>Fully Qualified Domain Name.</strong> The complete DNS name of a host, such as <code>dc01.example.com</code>.</dd>
+<dt>DNS</dt><dd><strong>Domain Name System.</strong> The naming system that maps names to network records. In AD, DNS also helps clients locate domain controllers through SRV records.</dd>
+</dl>
+
+${h3(IC.shield,"Governance, privilege, and security terms")}
+<dl class="vocab">
+<dt>IGA</dt><dd><strong>Identity Governance and Administration.</strong> The policies, workflows, reviews, and evidence used to keep access appropriate throughout an identity's lifecycle.</dd>
+<dt>JML</dt><dd><strong>Joiner, Mover, Leaver.</strong> The three lifecycle events that drive access changes when someone joins, changes role, or leaves.</dd>
+<dt>SoD</dt><dd><strong>Segregation of Duties.</strong> A control that prevents one person from holding conflicting powers, such as creating a vendor and approving payment.</dd>
+<dt>PAM</dt><dd><strong>Privileged Access Management.</strong> Controls for high-impact accounts and sessions, including vaulting, elevation, rotation, and recording.</dd>
+<dt>JIT</dt><dd><strong>Just-in-Time access.</strong> Privilege granted only for a limited period when it is needed, rather than held permanently.</dd>
+<dt>RBAC</dt><dd><strong>Role-Based Access Control.</strong> Access assigned through job or functional roles instead of individually granting every permission.</dd>
+<dt>ABAC</dt><dd><strong>Attribute-Based Access Control.</strong> Access decisions based on attributes such as user, device, resource, action, location, or risk.</dd>
+<dt>CIEM</dt><dd><strong>Cloud Infrastructure Entitlement Management.</strong> The practice and tooling used to discover, analyse, and right-size permissions in cloud environments.</dd>
+<dt>API</dt><dd><strong>Application Programming Interface.</strong> A defined way for software systems to communicate. SCIM and OAuth integrations use APIs.</dd>
+<dt>PKI</dt><dd><strong>Public Key Infrastructure.</strong> The people, processes, certificates, and authorities used to establish trust in public-key cryptography.</dd>
+<dt>CA</dt><dd><strong>Certificate Authority.</strong> A trusted system that issues and signs digital certificates.</dd>
+<dt>TTL</dt><dd><strong>Time To Live.</strong> How long a record, cache entry, or credential-related object remains valid before it must be refreshed or expires.</dd>
+</dl>
+
+<div class="card model"><div class="k">◆ TWO DISTINCTIONS TO KEEP HANDY</div><p><strong>Authentication is not authorization:</strong> proving who you are does not decide what you may access. <strong>LDAP is not Active Directory:</strong> LDAP is a protocol; Active Directory is a directory platform that can expose LDAP among several services and protocols.</p></div>
+
+${checkpoint([
+["What is the difference between OAuth and OIDC?","OAuth is about delegated authorization — what a client may access. OIDC builds an identity layer on OAuth so the client can verify who signed in."],
+["Why is an OU not a security boundary?","An OU organizes objects and helps apply administration or Group Policy. The forest is the important Active Directory security boundary."],
+["What is the difference between an ACL and an ACE?","An ACL is the complete permission list on a resource. An ACE is one individual allow or deny rule inside that list."],
+["Which three lifecycle events does JML describe?","Joiner, Mover, and Leaver: someone starts, changes role, or leaves the organisation."],
+["What does IdP versus SP mean in SAML?","The IdP authenticates and vouches for the user. The SP is the application that trusts the IdP's signed assertion."]
+])}
+<div class="footer-nav reveal"><button class="btn ghost" onclick="go(21)">← Day 21</button><button class="btn primary" onclick="go(23)">Final Exam →</button></div>
+<button class="mark-done" onclick="toggleDone(22,this)"><span>Mark Abbreviations complete</span></button>
+</div>`;
+
+// ============ FINAL EXAM (day 23) ============
+CONTENT[23]=`
+${hero(23,"Final Exam","20 questions spanning all 21 days. Answer them all, then submit to see your score, a per-section breakdown, and the full answer scheme with explanations.")}
 <div class="reveal">
 <p>This pulls from every day. Nothing is timed — work at your pace. Pick an answer for each question; when you\'ve done all 20, hit <strong>Submit exam</strong> at the bottom for your score, a breakdown by week, and a complete answer key you can study from.</p>
 <div id="exam"></div>
@@ -2022,8 +2093,8 @@ ${hero(22,"Final Exam","20 questions spanning all 21 days. Answer them all, then
   <button class="btn ghost" onclick="resetExam()">Reset</button>
 </div>
 <div class="exam-result" id="examResult"></div>
-<div class="footer-nav reveal" style="margin-top:40px"><button class="btn ghost" onclick="go(21)">← Day 21</button><span></span></div>
-<button class="mark-done" onclick="toggleDone(22,this)"><span>Mark exam complete</span></button>
+<div class="footer-nav reveal" style="margin-top:40px"><button class="btn ghost" onclick="go(22)">← Abbreviations</button><span></span></div>
+<button class="mark-done" onclick="toggleDone(23,this)"><span>Mark exam complete</span></button>
 </div>`;
 
 // ---- template helpers ----
@@ -2153,7 +2224,7 @@ function restoreProgress(){
     const tab=document.querySelector('.tab[data-tab="'+n+'"]');if(tab)tab.classList.add('done');
     // update any visible "mark complete" button on that day
     const day=document.querySelector('.day[data-day="'+n+'"]');
-    if(day){const btn=day.querySelector('.mark-done');if(btn){btn.classList.add('is-done');const sp=btn.querySelector('span');if(sp)sp.textContent=(n===22?'✓ Exam complete':'✓ Day '+n+' complete');}}
+    if(day){const btn=day.querySelector('.mark-done');if(btn){btn.classList.add('is-done');const sp=btn.querySelector('span');if(sp)sp.textContent=(n===23?'✓ Exam complete':n===22?'✓ Abbreviations complete':'✓ Day '+n+' complete');}}
   });
   refreshXP();
   if(data.exam){window.__examScore=data.exam;restoreExamScore(data.exam);}
